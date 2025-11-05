@@ -1,6 +1,7 @@
 import * as borsh from "borsh";
 import * as web3 from "@solana/web3.js";
 import fs from "fs";
+import { Buffer } from "buffer";
  
 let greetedPubkey: web3.PublicKey;
 
@@ -62,9 +63,8 @@ async function main() {
       programId: programId,
     })
   );
-
   // Encodage des données avec Borsh
-  const data = borsh.serialize(GreetingSchema, new GreetingAccount({ counter: 3 }));
+  const data = Buffer.from(borsh.serialize(GreetingSchema, new GreetingAccount({ counter: 3 })));
 
   // Instruction pour le programme
   transaction.add(
@@ -74,6 +74,7 @@ async function main() {
       data: data,
     })
   );
+ 
 
   // Envoi de la transaction
   await web3
